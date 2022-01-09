@@ -17,7 +17,8 @@ const plugins = [
 if (process.env.NODE_ENV === 'production') {
   mode = 'production';
   target = 'browserslist';
-} else {
+}
+if (process.env.SERVE) {
   plugins.push(new ReactRefreshWebpackPlugin());
 }
 
@@ -35,7 +36,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|jpe?g|gif|svg)$/i,
+        test: /\.(png|jpe?g|gif|svg|webp|ico)$/i,
         type: 'asset',
         // parser: {
         //   dataUrlCondition: {
