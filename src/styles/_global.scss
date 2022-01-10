@@ -1,6 +1,8 @@
 @use 'variables';
+@use 'fonts';
 
 body {
+  font-family: 'Muli';
   margin: 0;
   background-color: variables.$bg;
   color: var(--text);

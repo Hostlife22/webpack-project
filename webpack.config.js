@@ -2,12 +2,11 @@ const path = require('path');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 let mode = 'development';
 let target = 'web';
+
 const plugins = [
-  new CleanWebpackPlugin(),
   new MiniCssExtractPlugin(),
   new HtmlWebpackPlugin({
     template: './src/index.html',
@@ -25,26 +24,38 @@ if (process.env.SERVE) {
 module.exports = {
   mode: mode,
   target: target,
-
+  plugins: plugins,
   entry: './src/index.js',
+  devtool: mode === 'production' ? false : 'source-map',
+
+  devServer: {
+    static: './dist',
+    hot: true,
+  },
+
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    assetModuleFilename: 'images/[hash][ext][query]',
+    assetModuleFilename: 'assets/[hash][ext][query]',
+    clean: true,
   },
 
   module: {
     rules: [
       {
         test: /\.(png|jpe?g|gif|svg|webp|ico)$/i,
-        type: 'asset',
-        // parser: {
-        //   dataUrlCondition: {
-        //     maxSize: 30 * 1024,
-        //   },
-        // },
+        type: mode === 'production' ? 'asset' : 'asset/resource',
+        generator: {
+          filename: 'assets/img/[hash][ext]',
+        },
       },
-
+      {
+        test: /\.(html)$/,
+        use: ['html-loader'],
+      },
       {
         test: /\.(s[ac]|c)ss$/i,
         use: [
@@ -57,28 +68,23 @@ module.exports = {
           'sass-loader',
         ],
       },
-
+      {
+        test: /\.(woff2?|eot|ttf|otf)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/fonts/[hash][ext]',
+        },
+      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+          },
         },
       },
     ],
-  },
-
-  plugins: plugins,
-
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
-
-  devtool: 'source-map',
-
-  // Настройка сервера
-  devServer: {
-    static: './dist',
-    hot: true,
   },
 };
