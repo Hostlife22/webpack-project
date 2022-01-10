@@ -47,7 +47,7 @@ npm run lint
 ### Fix errors and warnings
 
 ```bash
-npm run lint
+npm run lint:fix
 ```
 
 ## Features
