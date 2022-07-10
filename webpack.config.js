@@ -27,7 +27,7 @@ module.exports = {
   mode: mode,
   target: target,
   plugins: plugins,
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   devtool: mode === 'production' ? false : 'source-map',
 
   devServer: {
@@ -36,7 +36,7 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
 
   output: {
@@ -83,7 +83,7 @@ module.exports = {
       },
 
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx?|tsx?)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
